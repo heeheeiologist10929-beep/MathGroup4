@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exponential Functions Explorer - Group 4</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    header {
+      background-color: #e3f2fd;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #0d47a1;
+    }
+    nav {
+      margin-top: 0.5rem;
+    }
+    nav a {
+      margin-right: 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    nav a.active {
+      color: #0d47a1;
+      border-bottom: 2px solid #0d47a1;
+      padding-bottom: 2px;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 3rem;
+    }
+    h2 {
+      color: #0d47a1;
+      border-bottom: 2px solid #90caf9;
+      padding-bottom: 0.3rem;
+      margin-bottom: 1rem;
+    }
+    /* Homepage */
+    #home p, #home ul {
+      font-size: 1.1rem;
+    }
+    #home em {
+      font-style: italic;
+    }
+    /* Lessons tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #90caf9;
+      margin-bottom: 1rem;
+    }
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0d47a1;
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s;
+      flex: 1 1 200px;
+      text-align: center;
+    }
+    .tab-button:hover {
+      background-color: #e3f2fd;
+    }
+    .tab-button.active {
+      border-color: #0d47a1;
+      background-color: #bbdefb;
+    }
+    .tab-content {
+      display: none;
+      background-color: white;
+      padding: 1rem;
+      border: 1px solid #90caf9;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .tab-content.active {
+      display: block;
+    }
+    /* Formula styling */
+    .formula {
+      font-family: 'Georgia', serif;
+      font-size: 1.4rem;
+      background-color: #e8f0fe;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 0.5rem 0 1rem 0;
+    }
+    /* Calculator */
+    #calculator input[type="number"] {
+      width: 80px;
+      padding: 0.3rem 0.5rem;
+      margin-right: 0.5rem;
+      font-size: 1rem;
+    }
+    #calculator button {
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #calculator button:hover {
+      background-color: #08306b;
+    }
+    #calc-result {
+      margin-top: 0.8rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #0d47a1;
+    }
+    /* Graph tool */
+    #graph-tool input[type="text"] {
+      width: 150px;
+      padding: 0.3rem 0.5rem;
+      margin-right: 0.5rem;
+      font-size: 1rem;
+    }
+    #graph-tool button {
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #graph-tool button:hover {
+      background-color: #08306b;
+    }
+    #graph-canvas {
+      margin-top: 1rem;
+      background-color: white;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      max-width: 100%;
+      height: 300px;
+    }
+    /* Quiz */
+    #quiz {
+      background-color: white;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    #quiz h3 {
+      margin-top: 0;
+    }
+    .question {
+      margin-bottom: 1rem;
+    }
+    .answers label {
+      display: block;
+      margin-bottom: 0.4rem;
+      cursor: pointer;
+    }
+    #quiz button {
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #quiz button:hover {
+      background-color: #08306b;
+    }
+    #quiz-result {
+      margin-top: 1rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #0d47a1;
+    }
+    /* Footer */
+    footer {
+      background-color: #e3f2fd;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #0d47a1;
+      border-top: 1px solid #90caf9;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav a {
+        display: block;
+        margin: 0.3rem 0;
+      }
+      .tabs {
+        flex-direction: column;
+      }
+      .tab-button {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Exponential Functions Explorer - Group 4</h1>
+    <nav>
+      <a href="#home" class="active">Home</a>
+      <a href="#lessons">Lessons</a>
+      <a href="#graph-tool">Graphing Tool</a>
+      <a href="#quiz">Quiz</a>
+    </nav>
+  </header>
+  <main>
+    <!-- Homepage -->
+    <section id="home">
+      <h2>Welcome to Exponential Functions</h2>
+      <p>Exponential functions are mathematical functions of the form:</p>
+      <div class="formula">f(x) = b<sup>x</sup></div>
+      <p>where <em>b</em> is the base and <em>x</em> is the exponent.</p>
+      <p>They are used to model many real-world phenomena such as population growth, radioactive decay, and compound interest.</p>
+      <h3>Examples:</h3>
+      <ul>
+        <li>Population growth: doubling every 10 years.</li>
+        <li>Radioactive decay: half-life of substances.</li>
+        <li>Compound interest in finance.</li>
+      </ul>
+    </section>
+
+    <!-- Lessons -->
+    <section id="lessons">
+      <h2>Lessons</h2>
+      <div class="tabs" role="tablist" aria-label="Lessons Tabs">
+        <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab1" id="tab1-btn">Exponential Functions & Equations</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab2" id="tab2-btn">Laws of Exponents</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab3" id="tab3-btn">Solving Exponential Equations</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab4" id="tab4-btn">Graphs of Exponential Functions</button>
+      </div>
+      <article id="tab1" class="tab-content active" role="tabpanel" aria-labelledby="tab1-btn">
+        <h3>Exponential Functions, Equations, and Inequalities</h3>
+        <p>An <strong>exponential function</strong> is a function of the form:</p>
+        <div class="formula">f(x) = b<sup>x</sup></div>
+        <p>where <em>b</em> is any number such that <em>b > 0</em> and <em>b ≠ 1</em>. In this case, <em>b</em> is called the base and <em>x</em> can be any real number.</p>
+        <p><strong>Exponential equations</strong> are equations in which variables occur as exponents.</p>
+        <p><em>Examples:</em></p>
+        <ul>
+          <li>2<sup>x+1</sup> = 8</li>
+          <li>3<sup>2x-1</sup> = 3<sup>x+1</sup></li>
+          <li>4<sup>2x</sup> = 2<sup>5-x</sup></li>
+          <li>10<sup>x</sup> = 100<sup>x-2</sup></li>
+        </ul>
+        <p>Likewise, <strong>exponential inequalities</strong> are inequalities in which variables occur as exponents.</p>
+        <p><em>Examples:</em></p>
+        <ul>
+          <li>2<sup>x+1</sup> < 8</li>
+          <li>3<sup>2x-1</sup> ≤ 3<sup>x+1</sup></li>
+          <li>4<sup>2x</sup> ≥ 2<sup>5-x</sup></li>
+          <li>10<sup>x</sup> > 100<sup>x-2</sup></li>
+        </ul>
+      </article>
+      <article id="tab2" class="tab-content" role="tabpanel" aria-labelledby="tab2-btn">
+        <h3>Laws of Exponents</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">Law</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>1</sup> = a</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">5<sup>1</sup> = 5</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>0</sup> = 1, with a ≠ 0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3<sup>0</sup> = 1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>-1</sup> = 1/a, with a ≠ 0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">4<sup>-1</sup> = 1/4</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>m</sup> a<sup>n</sup> = a<sup>m+n</sup></td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>3</sup> a<sup>4</sup> = a<sup>3+4</sup> = a<sup>7</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>m</sup> / a<sup>n</sup> = a<sup>m-n</sup>, with a ≠ 0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>7</sup> / a<sup>3</sup> = a<sup>7-3</sup> = a<sup>4</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">(a<sup>m</sup>)<sup>n</sup> = a<sup>m*n</sup></td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">(a<sup>3</sup>)<sup>4</sup> = a<sup>3*4</sup> = a<sup>12</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">(ab)<sup>n</sup> = a<sup>n</sup> b<sup>n</sup></td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">(ab)<sup>2</sup> = a<sup>2</sup> b<sup>2</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">(a/b)<sup>n</sup> = a<sup>n</sup> / b<sup>n</sup>, with b ≠ 0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">(a/b)<sup>3</sup> = a<sup>3</sup> / b<sup>3</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>-n</sup> = 1 / a<sup>n</sup>, with a ≠ 0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>-4</sup> = 1 / a<sup>4</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>m/n</sup> = n√a<sup>m</sup>, with n ≠ 0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">a<sup>3/4</sup> = 4√a<sup>3</sup></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">Let a ≠ 0. If a<sup>x</sup> = a<sup>y</sup>, then x = y.</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3<sup>2x</sup> = 3<sup>x+1</sup> implies that 2x = x + 1 or x = 1.</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+      <article id="tab3" class="tab-content" role="tabpanel" aria-labelledby="tab3-btn">
+        <h3>Solving Exponential Equations and Inequalities</h3>
+        <p><strong>Step 1.</strong> Rewrite both sides with the same base that is nonzero.</p>
+        <p><strong>Step 2.</strong> Equate the exponents on both sides of the equation.<br /><em>(This is the application of Law 11, that is, if a<sup>x</sup> = a<sup>y</sup>, then x = y.)</em></p>
+        <p><strong>Step 3.</strong> Solve for <em>x</em>.</p>
+        <h4>Examples:</h4>
+        <ol>
+          <li>Given: 3<sup>x</sup> = 81</li>
+          <li>Rewrite 81 as 3<sup>4</sup></li>
+          <li>Set exponents equal: x = 4</li>
+          <li>Solution: x = 4</li>
+        </ol>
+        <ol>
+          <li>Given: 2<sup>x+1</sup> = 16</li>
+          <li>Rewrite 16 as 2<sup>4</sup></li>
+          <li>Set exponents equal: x + 1 = 4</li>
+          <li>Solve for x: x = 3</li>
+        </ol>
+        <h4>Example: Evaluating g(x) = 3<sup>-x</sup></h4>
+        <p>Consider the function <strong>g(x) = 3<sup>-x</sup></strong>. Let's evaluate it at some points:</p>
+        <ul>
+          <li><strong>g(-3)</strong> = 3<sup>-(-3)</sup> = 3<sup>3</sup> = 27</li>
+          <li><strong>g(0)</strong> = 3<sup>-0</sup> = 3<sup>0</sup> = 1</li>
+          <li><strong>g(3)</strong> = 3<sup>-3</sup> = 1 / 3<sup>3</sup> = 1 / 27 ≈ 0.037</li>
+        </ul>
+        <p>Table of values:</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">x</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">g(x)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">27</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0.037</td>
+            </tr>
+          </tbody>
+        </table>
+        <canvas id="canvas-g" style="margin-top: 1rem; background-color: white; border: 1px solid #90caf9; border-radius: 6px; max-width: 100%; height: 200px;"></canvas>
+
+        <h4>Example: Evaluating f(x) = 3<sup>x</sup></h4>
+        <p>Consider the function <strong>f(x) = 3<sup>x</sup></strong>. Let's evaluate it at some points:</p>
+        <ul>
+          <li><strong>f(-3)</strong> = 3<sup>-3</sup> = 1 / 3<sup>3</sup> = 1 / 27 ≈ 0.037</li>
+          <li><strong>f(0)</strong> = 3<sup>0</sup> = 1</li>
+          <li><strong>f(3)</strong> = 3<sup>3</sup> = 27</li>
+        </ul>
+        <p>Table of values:</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">x</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">f(x)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0.037</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">27</td>
+            </tr>
+          </tbody>
+        </table>
+        <canvas id="canvas-f" style="margin-top: 1rem; background-color: white; border: 1px solid #90caf9; border-radius: 6px; max-width: 100%; height: 200px;"></canvas>
+
+        <h4>Example: Evaluating h(x) = -3<sup>x</sup></h4>
+        <p>Consider the function <strong>h(x) = -3<sup>x</sup></strong>. Let's evaluate it at some points:</p>
+        <ul>
+          <li><strong>h(-3)</strong> = -3<sup>-3</sup> = -1 / 3<sup>3</sup> = -1 / 27 ≈ -0.037</li>
+          <li><strong>h(0)</strong> = -3<sup>0</sup> = -1</li>
+          <li><strong>h(3)</strong> = -3<sup>3</sup> = -27</li>
+        </ul>
+        <p>Table of values:</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">x</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">h(x)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-0.037</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-27</td>
+            </tr>
+          </tbody>
+        </table>
+        <canvas id="canvas-h" style="margin-top: 1rem; background-color: white; border: 1px solid #90caf9; border-radius: 6px; max-width: 100%; height: 200px;"></canvas>
+        <h4>Plotting Exponential Functions</h4>
+        <p>Follow these steps to plot exponential functions:</p>
+        <ol>
+          <li>Construct a T-table for values in the domain.</li>
+          <li>Plot the points from the T-table.</li>
+          <li>Trace the curve connecting the points.</li>
+        </ol>
+        <h5>Example:</h5>
+        <p>Plot the functions below:</p>
+        <ul>
+          <li><em>f(x) = 2<sup>x</sup></em></li>
+          <li><em>g(x) = 2<sup>-x</sup></em></li>
+          <li><em>h(x) = -2<sup>x</sup></em></li>
+        </ul>
+        <h6>Solutions:</h6>
+        <p>a. Construct T-table for <em>f(x) = 2<sup>x</sup></em>:</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">x</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">f(x) = 2<sup>x</sup></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">2<sup>-3</sup> = 1 / 2<sup>3</sup> = 1 / 8 = 0.125</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">2<sup>0</sup> = 1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">2<sup>3</sup> = 8</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Plot the points (-3, 0.125), (0, 1), and (3, 8).</p>
+        <canvas id="canvas-fx" style="max-width: 100%; border: 1px solid #90caf9; border-radius: 6px; margin-bottom: 1rem; height: 200px;"></canvas>
+        <p>b. Construct T-table for <em>g(x) = 2<sup>-x</sup></em>:</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">x</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">g(x) = 2<sup>-x</sup></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">2<sup>-(-3)</sup> = 2<sup>3</sup> = 8</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">2<sup>-0</sup> = 1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">2<sup>-3</sup> = 1 / 8 = 0.125</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Plot the points (-3, 8), (0, 1), and (3, 0.125).</p>
+        <canvas id="canvas-gx" style="max-width: 100%; border: 1px solid #90caf9; border-radius: 6px; margin-bottom: 1rem; height: 200px;"></canvas>
+        <p>c. Construct T-table for <em>h(x) = -2<sup>x</sup></em>:</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">x</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">h(x) = -2<sup>x</sup></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-2<sup>-3</sup> = -1 / 2<sup>3</sup> = -1 / 8 = -0.125</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">0</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-2<sup>0</sup> = -1</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">3</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem; text-align: center;">-2<sup>3</sup> = -8</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Plot the points (-3, -0.125), (0, -1), and (3, -8).</p>
+        <canvas id="canvas-hx" style="max-width: 100%; border: 1px solid #90caf9; border-radius: 6px; margin-bottom: 1rem; height: 200px;"></canvas>
+        <h4>Functions f(x) = a<sup>x</sup> and g(x) = -a<sup>x</sup></h4>
+        <p>Consider the functions <em>f(x) = a<sup>x</sup></em> and <em>g(x) = -a<sup>x</sup></em> for some positive number <em>a</em>.</p>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+          <thead>
+            <tr style="background-color: #e3f2fd;">
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">Function</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">f(x)</th>
+              <th style="border: 1px solid #90caf9; padding: 0.5rem;">g(x)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Domain</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Real numbers</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Real numbers</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Range</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Positive numbers</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Negative numbers</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">Asymptote</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">x-axis</td>
+              <td style="border: 1px solid #90caf9; padding: 0.5rem;">x-axis</td>
+            </tr>
++          </tbody>
++        </table>
++        <p>Note that <em>f</em> and <em>g</em> both have no zero. Otherwise, for each function, it leads to a contradiction as shown below.</p>
++        <p><strong>Example:</strong></p>
++        <p>Let <em>a > 0</em> and <em>a ≠ 1</em>. Suppose <em>f(x) = a<sup>x</sup></em> has a zero such that there exists a real number <em>x</em> such that</p>
++        <div class="formula">f(x) = 0</div>
++        <div class="formula">a<sup>x</sup> = 0</div>
++        <p>But since <em>a > 0</em>, then for all <em>x</em>, <em>a<sup>x</sup> > 0</em>. This contradicts the equation above that <em>a<sup>x</sup> = 0</em>. Therefore, <em>f(x) = a<sup>x</sup></em> has no zero.</p>
+       </article>
+      <article id="tab4" class="tab-content" role="tabpanel" aria-labelledby="tab4-btn">
+        <h3>Graphs of Exponential Functions</h3>
+        <p>Exponential functions have characteristic curves that increase or decrease rapidly.</p>
+        <p>Example: Graph of f(x) = 2<sup>x</sup></p>
+        <p>Use the graphing tool below to plot your own exponential functions.</p>
+        <p><em>For detailed graphs and plotting examples, please use the graphing tool above and input the functions as shown in the lessons.</em></p>
+      </article>
+    </section>
+
+    <!-- Calculator -->
+    <section id="calculator">
+      <h2>Calculator</h2>
+      <p>Enter a base <code>b</code> and exponent <code>x</code> to calculate <code>b<sup>x</sup></code>:</p>
+      <input type="number" id="calc-base" placeholder="Base (b)" step="any" />
+      <input type="number" id="calc-exponent" placeholder="Exponent (x)" step="any" />
+      <button id="calc-btn">Calculate</button>
+      <div id="calc-result"></div>
+    </section>
+
+    <!-- Graphing Tool -->
+    <section id="graph-tool">
+      <h2>Graphing Tool</h2>
+      <p>Enter an exponential function of the form <code>b^x</code> (e.g., 2^x):</p>
+      <input type="text" id="graph-function" placeholder="e.g. 2^x" />
+      <button id="graph-btn">Plot Graph</button>
+      <canvas id="graph-canvas"></canvas>
+    </section>
+
+    <!-- Quiz -->
+    <section id="quiz">
+      <h2>Quiz</h2>
+      <form id="quiz-form">
+        <div class="question">
+          <h3>1. What is the value of b<sup>0</sup> for any nonzero base b?</h3>
+          <div class="answers">
+            <label><input type="radio" name="q1" value="a" required> 0</label>
+            <label><input type="radio" name="q1" value="b"> 1</label>
+            <label><input type="radio" name="q1" value="c"> b</label>
+            <label><input type="radio" name="q1" value="d"> Undefined</label>
+          </div>
+        </div>
+        <div class="question">
+          <h3>2. Solve for x: 2<sup>x</sup> = 8</h3>
+          <div class="answers">
+            <label><input type="radio" name="q2" value="a" required> 2</label>
+            <label><input type="radio" name="q2" value="b"> 3</label>
+            <label><input type="radio" name="q2" value="c"> 4</label>
+            <label><input type="radio" name="q2" value="d"> 8</label>
+          </div>
+        </div>
+        <div class="question">
+          <h3>3. Which law of exponents states that b<sup>m</sup> * b<sup>n</sup> = b<sup>m+n</sup>?</h3>
+          <div class="answers">
+            <label><input type="radio" name="q3" value="a" required> Product of Powers</label>
+            <label><input type="radio" name="q3" value="b"> Power of a Power</label>
+            <label><input type="radio" name="q3" value="c"> Zero Exponent</label>
+            <label><input type="radio" name="q3" value="d"> Negative Exponent</label>
+          </div>
+        </div>
+        <button type="submit">Submit Quiz</button>
+      </form>
+      <div id="quiz-result"></div>
+    </section>
+  </main>
+  <section id="presenters" style="max-width: 900px; margin: 0 auto 2rem auto; padding: 0 1rem;">
+    <h2>Presenters & Creator</h2>
+    <p><strong>Presenters:</strong></p>
+    <ul>
+      <li>Matthew Guirao (leader)</li>
+      <li>Aubrey Malabanan</li>
+      <li>Shawn Estaris</li>
+      <li>Janna Lopez</li>
+      <li>Leric Medel</li>
+      <li>Ralph Cano</li>
+      <li>Danielvis Dulay</li>
+      <li>Denzel Rivera</li>
+    </ul>
+    <p><strong>Website Creator:</strong> Genesis Matthew Edrosa</p>
+  </section>
+  <footer>
+    <p>Created by Genesis Matthew Edrosa from ICTMAWD111 for General Mathematics - Ms.Beronica Leih Ramos | <a href="https://www.desmos.com/calculator" target="_blank" rel="noopener noreferrer">powered by Desmos Graphing Calculator</a></p>
+  </footer>
+
+  <script>
+    // Navigation active link highlight
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    // Tabs functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        tabContents.forEach(content => content.classList.remove('active'));
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        const tabId = button.getAttribute('aria-controls');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // Calculator functionality
+    const calcBtn = document.getElementById('calc-btn');
+    const calcResult = document.getElementById('calc-result');
+    calcBtn.addEventListener('click', () => {
+      const base = parseFloat(document.getElementById('calc-base').value);
+      const exponent = parseFloat(document.getElementById('calc-exponent').value);
+      if (isNaN(base) || isNaN(exponent)) {
+        calcResult.textContent = 'Please enter valid numbers for base and exponent.';
+        return;
+      }
+      const result = Math.pow(base, exponent);
+      calcResult.textContent = `${base}^${exponent} = ${result}`;
+    });
+
+    // Graphing tool functionality using Chart.js
+    const graphBtn = document.getElementById('graph-btn');
+    const graphCanvas = document.getElementById('graph-canvas');
+    let chart = null;
+
+    graphBtn.addEventListener('click', () => {
+      const funcInput = document.getElementById('graph-function').value.trim();
+      // Validate input format like "-2^x", "2^x", "3^-x", or "-3^-x"
+      const match = funcInput.match(/^(-?)(\d+(\.\d+)?)\^(-?x)$/i);
+      if (!match) {
+        alert('Please enter a function in the form b^x, -b^x, b^-x, or -b^-x, e.g., 2^x, -2^x, 3^-x, or -3^-x');
+        return;
+      }
+      const sign = match[1] === '-' ? -1 : 1;
+      const base = parseFloat(match[2]);
+      const exponentSign = match[4].startsWith('-') ? -1 : 1;
+      if (isNaN(base) || base <= 0) {
+        alert('Base must be a positive number.');
+        return;
+      }
+      // Generate data points
+      const labels = [];
+      const dataPoints = [];
+      for (let x = -10; x <= 10; x++) {
+        labels.push(x);
+        dataPoints.push(sign * Math.pow(base, exponentSign * x));
+      }
+      // Destroy previous chart if exists
+      if (chart) {
+        chart.destroy();
+      }
+      chart = new Chart(graphCanvas, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${sign === -1 ? '-' : ''}${base}^x`,
+            data: dataPoints,
+            borderColor: '#0d47a1',
+            backgroundColor: 'rgba(13, 71, 161, 0.2)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 3,
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: false,
+              type: 'linear',
+              title: {
+                display: true,
+                text: 'f(x)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'x'
+              }
+            }
+          }
+        }
+      });
+    });
+
+    // Quiz functionality
+    const quizForm = document.getElementById('quiz-form');
+    const quizResult = document.getElementById('quiz-result');
+    const correctAnswers = {
+      q1: 'b',
+      q2: 'b',
+      q3: 'a'
+    };
+    quizForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let score = 0;
+      const formData = new FormData(quizForm);
+      for (const [key, value] of formData.entries()) {
+        if (correctAnswers[key] === value) {
+          score++;
+        }
+      }
+      quizResult.textContent = `You scored ${score} out of 3.`;
+    });
+
+    // Initialize charts for g(x), f(x), and h(x)
+    function initializeCharts() {
+      // Chart for g(x) = 3^-x
+      const canvasG = document.getElementById('canvas-g');
+      if (canvasG) {
+        const labelsG = [-3, 0, 3];
+        const dataG = [27, 1, 1/27];
+        new Chart(canvasG, {
+          type: 'line',
+          data: {
+            labels: labelsG,
+            datasets: [{
+              label: 'g(x) = 3^-x',
+              data: dataG,
+              borderColor: '#0d47a1',
+              backgroundColor: 'rgba(13, 71, 161, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'g(x)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'x'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart for f(x) = 3^x
+      const canvasF = document.getElementById('canvas-f');
+      if (canvasF) {
+        const labelsF = [-3, 0, 3];
+        const dataF = [1/27, 1, 27];
+        new Chart(canvasF, {
+          type: 'line',
+          data: {
+            labels: labelsF,
+            datasets: [{
+              label: 'f(x) = 3^x',
+              data: dataF,
+              borderColor: '#0d47a1',
+              backgroundColor: 'rgba(13, 71, 161, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'f(x)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'x'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart for h(x) = -3^x
+      const canvasH = document.getElementById('canvas-h');
+      if (canvasH) {
+        const labelsH = [-3, 0, 3];
+        const dataH = [-1/27, -1, -27];
+        new Chart(canvasH, {
+          type: 'line',
+          data: {
+            labels: labelsH,
+            datasets: [{
+              label: 'h(x) = -3^x',
+              data: dataH,
+              borderColor: '#0d47a1',
+              backgroundColor: 'rgba(13, 71, 161, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'h(x)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'x'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart for f(x) = 2^x (canvas-fx)
+      const canvasFx = document.getElementById('canvas-fx');
+      if (canvasFx) {
+        const labelsFx = [-3, 0, 3];
+        const dataFx = [Math.pow(2, -3), Math.pow(2, 0), Math.pow(2, 3)];
+        new Chart(canvasFx, {
+          type: 'line',
+          data: {
+            labels: labelsFx,
+            datasets: [{
+              label: 'f(x) = 2^x',
+              data: dataFx,
+              borderColor: '#0d47a1',
+              backgroundColor: 'rgba(13, 71, 161, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'f(x)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'x'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart for g(x) = 2^-x (canvas-gx)
+      const canvasGx = document.getElementById('canvas-gx');
+      if (canvasGx) {
+        const labelsGx = [-3, 0, 3];
+        const dataGx = [Math.pow(2, 3), Math.pow(2, 0), Math.pow(2, -3)];
+        new Chart(canvasGx, {
+          type: 'line',
+          data: {
+            labels: labelsGx,
+            datasets: [{
+              label: 'g(x) = 2^-x',
+              data: dataGx,
+              borderColor: '#0d47a1',
+              backgroundColor: 'rgba(13, 71, 161, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'g(x)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'x'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Chart for h(x) = -2^x (canvas-hx)
+      const canvasHx = document.getElementById('canvas-hx');
+      if (canvasHx) {
+        const labelsHx = [-3, 0, 3];
+        const dataHx = [-Math.pow(2, -3), -Math.pow(2, 0), -Math.pow(2, 3)];
+        new Chart(canvasHx, {
+          type: 'line',
+          data: {
+            labels: labelsHx,
+            datasets: [{
+              label: 'h(x) = -2^x',
+              data: dataHx,
+              borderColor: '#0d47a1',
+              backgroundColor: 'rgba(13, 71, 161, 0.2)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: 'h(x)'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'x'
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // Initialize charts on page load
+    window.addEventListener('load', initializeCharts);
+  </script>
+</body>
+</html>
